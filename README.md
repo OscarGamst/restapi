@@ -59,7 +59,9 @@ http://localhost:8080/api/
 
 ### Endpoints
 **Add activity**
-```sh POST /activities ```
+```sh 
+POST /activities
+```
 
 Request Body:
 ```sh
