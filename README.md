@@ -38,13 +38,19 @@ cd restapi
 
 ### Configure the Database
 
+Create a new databse in pgAdmin (PostgrSQL):
+Name the database "workoutdb"
+
+<br /> 
+
 Update application.properties or application.yml with your PostgreSQL credentials:
 ```sh
 spring.datasource.url=jdbc:postgresql://localhost:5432/restapi
 spring.datasource.username=your_username
 spring.datasource.password=your_password
-spring.jpa.hibernate.ddl-auto=update /// OR create
+spring.jpa.hibernate.ddl-auto=create /// can be changed to update after the first time
 ```
+
 Build and Run the Application
 ```sh
 mvn clean install
@@ -66,40 +72,112 @@ POST /activities
 Request Body:
 ```sh
 {
+  "username": "A username",
   "type": "run",
-  "distance": 5.0,
-  "duration": 1800,
-  "date": "2025-03-10"
+  "title": "A title",
+  "description": "A description",
+  "duration": "100",
+  "calories": "1"
 }
 ```
-response:
+Response:
 ```sh
-{
-  "id": 1,
-  "type": "RUNNING",
-  "distance": 5.0,
-  "duration": 1800,
-  "date": "2025-03-10"
-}
+    {
+        "id": 2,
+        "username": "A username",
+        "type": "run",
+        "title": "A title",
+        "description": "A description",
+        "duration": 100,
+        "calories": 1,
+        "timestamp": "2025-03-17 18:48:20"
+    }
 ```
 
-Get All Activities:
+**Get all Activities**
+```sh 
+GET /activities
+```
+
+Response:
 ```sh
 [
-  {
-    "id": 1,
-    "type": "run",
-    "distance": 5.0,
-    "duration": 1800,
-    "date": "2025-03-10"
-  },
-  {
-    "id": 2,
-    "type": "workout",
-    "distance": 5.0,
-    "duration": 1800,
-    "date": "2025-03-10"
-  }
-
+    {
+        "id": 2,
+        "username": "A username",
+        "type": "run",
+        "title": "A title",
+        "description": "A description",
+        "duration": 100,
+        "calories": 1,
+        "timestamp": "2025-03-17 18:48:20"
+    },
+    {
+        "id": 3,
+        "username": "Another username",
+        "type": "workout",
+        "title": "Another title",
+        "description": "Another description",
+        "duration": 110,
+        "calories": 2,
+        "timestamp": "2025-03-17 18:50:04"
+    }
 ]
+```
+
+**Get a specific Activity**
+```sh 
+GET /activities/id
+```
+Response:
+```sh
+    {
+        "id": 2,
+        "username": "A username",
+        "type": "run",
+        "title": "A title",
+        "description": "A description",
+        "duration": 100,
+        "calories": 1,
+        "timestamp": "2025-03-17 18:48:20"
+    }
+```
+
+**Delete Activity**
+```sh
+DELETE /activities/id
+```
+
+Response:
+```sh
+200 OK
+```
+
+**Update Activity**
+```sh
+PUT /activities/id
+```
+
+Request body:
+```sh
+    {
+        "type": "workout",
+        "title": "Updated title",
+        "description": "Updated description",
+        "duration": 110
+    }
+```
+
+Response:
+```sh
+    {
+        "id": 3,
+        "username": "Another username",
+        "type": "workout",
+        "title": "Updated title",
+        "description": "Updated description",
+        "duration": 110,
+        "calories": 2,
+        "timestamp": "2025-03-17 18:50:04"
+    }
 ```
