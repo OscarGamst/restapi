@@ -53,10 +53,23 @@ public class ActivityController {
     }
 
 
-    //  ------------------ PUT ------------------
-    //  ---------INSERT ALL PUTTERS HERE---------
-
 
     //  ------------------ DELETE ------------------
     //  ---------INSERT ALL DELETES HERE------------
+    @DeleteMapping("/{id}")
+    public void deleteActivityById(@PathVariable Long id) {
+        activityService.deleteActivity(id);
+    }
+
+    //  ------------------ PUT ------------------
+    //  ---------INSERT ALL PUTTERS HERE---------
+    @PutMapping("/{id}")
+    public ResponseEntity<Activity> updateActivity(@PathVariable long id, @RequestBody Activity updatedactivity) {
+        try {
+            Activity activity = activityService.updateActivity(id, updatedactivity);
+            return new ResponseEntity<>(activity, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }

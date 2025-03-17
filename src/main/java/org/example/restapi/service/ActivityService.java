@@ -16,4 +16,10 @@ public interface ActivityService {
 
     //  ------------------ SAVE ------------------
     Activity saveActivity(Activity activity);
+
+    //  ------------------ DELETE ------------------
+    void deleteActivity(Long id);
+
+    //  ------------------ PUT ------------------
+    Activity updateActivity(long id, Activity activity);
 }

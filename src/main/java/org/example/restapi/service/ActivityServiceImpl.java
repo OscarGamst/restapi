@@ -39,4 +39,22 @@ public class ActivityServiceImpl implements org.example.restapi.service.Activity
     }
 
 
+    //  ------------------ DELETE ------------------
+    @Override
+    public void deleteActivity(Long id) {
+        activityRepository.deleteById(id);
+    }
+
+    //  ------------------ PUT ------------------
+    public Activity updateActivity(long id, Activity updatedactivity) {
+        return activityRepository.findById(id)
+                .map(existingActivity -> {
+                    existingActivity.setType(updatedactivity.getType());
+                    existingActivity.setTitle(updatedactivity.getTitle());
+                    existingActivity.setDescription(updatedactivity.getDescription());
+                    existingActivity.setDuration(updatedactivity.getDuration());
+                    return activityRepository.save(existingActivity);
+                })
+                .orElseThrow(() -> new RuntimeException("Activity not found"));
+    }
 }
