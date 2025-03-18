@@ -57,12 +57,58 @@ mvn clean install
 mvn spring-boot:run
 ```
 
-## API Documentation
+# API Documentation
 Base URL
 ```sh
 http://localhost:8080/api/
 ```
 
+## Users
+### Endpoints
+**Create User**
+```sh
+POST /users
+```
+
+Request Body:
+```sh
+{
+  "username": "A username",
+  "email": "email@example.com",
+  "password": "password",
+  "birthdate": "2000-01-01",
+  "profileVis": true
+}
+```
+
+**Get Users**
+```sh
+GET /users
+```
+
+Response:
+```sh
+[
+    {
+        "username": "A username",
+        "email": "email@example.com",
+        "password": "password",
+        "birthdate": "2000-01-01",
+        "profile_vis": false,
+        "activities": []
+    },
+    {
+        "username": "Another username",
+        "email": "another-email@example.com",
+        "password": "Another password",
+        "birthdate": "2000-02-02",
+        "profile_vis": false,
+        "activities": []
+    }
+]
+```
+
+## Activities
 ### Endpoints
 **Add activity**
 ```sh 
@@ -181,3 +227,4 @@ Response:
         "timestamp": "2025-03-17 18:50:04"
     }
 ```
+
