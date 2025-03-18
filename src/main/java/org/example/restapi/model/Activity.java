@@ -13,7 +13,7 @@ public class Activity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Column(name = "username")
+    @Column(name = "username", insertable = false, updatable = false)
     private String username;
 
     @Column(name = "type")
@@ -34,6 +34,10 @@ public class Activity {
     @Column(name = "timestamp")
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime timestamp;
+
+    @ManyToOne
+    @JoinColumn(name = "username", referencedColumnName = "username", nullable = false)
+    private User user;
 
     public long getId() {
         return id;
