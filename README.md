@@ -16,17 +16,17 @@ A **Spring Boot** backend for a workout tracking application. This backend handl
 
 ## Technologies Used
 | Technology   | Version |
-|-------------|---------|
-| Java        | 17      |
-| Spring Boot | 2.7     |
-| PostgreSQL  | 14      |
-| MapStruct   | Latest  |
-| Lombok      | Latest  |
-| Docker      | Planned |
+|-------------|-----------|
+| Java        | minumim 22|
+| Spring Boot | 2.7       |
+| PostgreSQL  | 14        |
+| MapStruct   | Latest    |
+| Lombok      | Latest    |
+| Docker      | Planned   |
 
 ## Setup Instructions
 ### Prerequisites
-- Install **Java 17**
+- Install **Java 22**
 - Install **PostgreSQL** and create a database
 - Install **Maven**
 - IDE (this project made with intelliJ IDEA)
@@ -65,7 +65,7 @@ http://localhost:8080/api/
 ```
 
 For this project I have chosen to do testing and documentation with Postman, 
-but for ease I have added Swagger UI to make it easier for others to test the API.
+but for ease I will add Swagger UI to make it easier for others to test the API.
 To test and access:
 - Swagger UI: http://localhost:8080/swagger-ui.html
 - OpenAPI JSON: http://localhost:8080/v3/api-docs
