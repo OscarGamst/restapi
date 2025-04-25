@@ -1,43 +1,28 @@
-package org.example.restapi.model;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.*;
+package org.example.restapi.dto;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
-@Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "activity_type", discriminatorType = DiscriminatorType.STRING)
-@Table(name = "Activities")
-public abstract class Activity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+// Common base class
+public abstract class BaseActivityResponseDTO {
     private long id;
-
-    //@Column(name = "type")
-    //private String type;
-
-    @Column(name = "title" )
+    private String type;
     private String title;
-
-    @Column(name = "description")
     private String description;
-
-    @Column(name = "duration")
     private int duration;
-
-    @Column(name = "calories")
     private int calories;
-
-    @Column(name = "timestamp")
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime timestamp;
+    private String username;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "username")
-    private User user;
+    public BaseActivityResponseDTO(long id, String type, String title, String description, int duration, int calories, LocalDateTime timestamp, String username) {
+        this.id = id;
+        this.type = type;
+        this.title = title;
+        this.description = description;
+        this.duration = duration;
+        this.calories = calories;
+        this.timestamp = timestamp;
+        this.username = username;
+    }
 
     public long getId() {
         return id;
@@ -48,10 +33,11 @@ public abstract class Activity {
     }
 
     public String getType() {
-        return this.getClass().getSimpleName().toLowerCase();
+        return type;
     }
 
     public void setType(String type) {
+        this.type = type;
     }
 
     public String getTitle() {
@@ -90,21 +76,15 @@ public abstract class Activity {
         return timestamp;
     }
 
-
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
 
-    @PrePersist
-    public void setTimestamp() {
-        this.timestamp = LocalDateTime.now();
+    public String getUsername() {
+        return username;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

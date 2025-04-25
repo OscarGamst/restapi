@@ -8,43 +8,23 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements org.example.restapi.service.UserService {
+public class UserServiceImpl implements UserService {
+
     @Autowired
     private UserRepository userRepository;
 
-    //  ------------------ GET ------------------
+    // ----------------- ALL CREATE -----------------
     @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public void createUser(User user) {
+        userRepository.save(user);
     }
 
-    @Override
-    public User getUserByUsername(String username) {
-        return userRepository.getUserByUsername(username);
+    // ----------------- ALL UPDATES -----------------
+    public User updateUser(String username, User updatedUser) {
+        return userRepository.findById(username).map(user -> {
+            user.setEmail(updatedUser.getEmail());
+            user.setPassword(updatedUser.getPassword());
+            return userRepository.save(user);
+        }).orElseThrow(() -> new RuntimeException("User not found with username: " + username));
     }
-
-    //  ------------------ SAVE ------------------
-    @Override
-    public User createUser(User user) {
-        return userRepository.save(user);
-    }
-
-    //  ------------------ DELETE ------------------
-    @Override
-    public void deleteUser(String username) {
-        userRepository.deleteById(username);
-    }
-
-    //  ------------------ PUT ------------------
-    @Override
-    public User updateUser(String username, User user) {
-        return userRepository.findById(username)
-                .map(existingUser -> {
-                    existingUser.setEmail(user.getEmail());
-                    existingUser.setPassword(user.getPassword()); // Hash the password if needed
-                    return userRepository.save(existingUser);
-                })
-                .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
-    }
-
 }

@@ -2,52 +2,38 @@ package org.example.restapi.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
-
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
 public class User {
-
     @Id
     @Column(name = "username", unique = true, nullable = false)
     private String username;
 
-
     @Column(name = "email")
     private String email;
-
 
     @Column(name = "password")
     private String password;
 
+    @Column(name = "profile_vis")
+    private boolean profile_vis;
 
     @Column(name = "birthdate")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date birthdate;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<Activity> activities = new HashSet<>();
 
-    @Column(name = "profile_vis")
-    private boolean profile_vis;
-
-    @OneToMany(mappedBy = "user")
-    private List<Activity> activities;
-
-
-    public User(String username, String email, String password, Date birthdate, boolean profile_vis) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.birthdate = birthdate;
-        this.profile_vis = profile_vis;
-    }
-
-    public User() {
-
+    public void addActivity(Activity activity) {
+        activities.add(activity);
+        activity.setUser(this);
     }
 
     public String getUsername() {
@@ -74,14 +60,6 @@ public class User {
         this.password = password;
     }
 
-    public Date getBirthdate() {
-        return birthdate;
-    }
-
-    public void setBirthdate(Date birthdate) {
-        this.birthdate = birthdate;
-    }
-
     public boolean isProfile_vis() {
         return profile_vis;
     }
@@ -90,11 +68,19 @@ public class User {
         this.profile_vis = profile_vis;
     }
 
-    public List<Activity> getActivities() {
+    public Date getBirthdate() {
+        return birthdate;
+    }
+
+    public void setBirthdate(Date birthdate) {
+        this.birthdate = birthdate;
+    }
+
+    public Set<Activity> getActivities() {
         return activities;
     }
 
-    public void setActivities(List<Activity> activities) {
+    public void setActivities(Set<Activity> activities) {
         this.activities = activities;
     }
 }

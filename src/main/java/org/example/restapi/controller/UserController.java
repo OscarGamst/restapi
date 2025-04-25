@@ -1,5 +1,7 @@
 package org.example.restapi.controller;
 
+import jakarta.validation.Valid;
+import org.example.restapi.dto.UserDetailedDTO;
 import org.example.restapi.model.User;
 import org.example.restapi.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -17,30 +19,26 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
+    // ----------------- ALL GETS -----------------
+    //Basic user info
 
-    //  ------------------ GET ------------------
-    //  ---------INSERT ALL GETTERS HERE---------
-
-    @GetMapping()
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
-    }
-
-    @GetMapping("/username/{username}")
-    public User getUserByUsername(@PathVariable String username) {
-        return userService.getUserByUsername(username);
-    }
-
-    //  ------------------ POST ------------------
-    //  ---------INSERT ALL POSTERS HERE----------
-
+    //Detailed user info
+    // ----------------- ALL POSTS -----------------
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User savedUser = userService.createUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+    public void createUser(@RequestBody User user) {
+        userService.createUser(user);
     }
 
-    //  ------------------ DELETE ------------------
-    //  ---------INSERT ALL DELETES HERE------------
+    // ----------------- ALL DELETES -----------------
 
+    // ----------------- ALL UPDATES -----------------
+    @PutMapping("/{username}")
+    public ResponseEntity<User> updateUser(@PathVariable String username, @RequestBody User updatedUser) {
+        try {
+            User user = userService.updateUser(username, updatedUser);
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }

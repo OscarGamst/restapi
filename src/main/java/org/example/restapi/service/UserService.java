@@ -5,19 +5,20 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-@Service
+
 public interface UserService {
 
-    //  ------------------ GET------------------
-    List<User> getAllUsers();
-    User getUserByUsername(String username);
-    //  ------------------ SAVE ------------------
-    User createUser(User user);
+    // ----------------- ALL GETS -----------------
 
-    //  ------------------ DELETE ------------------
-    void deleteUser(String username);
 
-    //  ------------------ PUT ------------------
-    User updateUser(String username, User user);
+    // ----------------- ALL CREATE -----------------
+    void createUser(User user);
+
+
+    // ----------------- ALL DELETES -----------------
+
+    // ----------------- ALL UPDATES -----------------
+    User updateUser(String username, User updatedUser);
+
 
 }

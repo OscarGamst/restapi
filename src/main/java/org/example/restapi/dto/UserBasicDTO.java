@@ -7,10 +7,8 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class UserBasicDTO {
     private String username;
     private String email;
-    private Date birthday;
+    private Boolean profile_vis;
 }

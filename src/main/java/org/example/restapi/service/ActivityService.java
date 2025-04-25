@@ -6,20 +6,17 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-@Service
+
 public interface ActivityService {
-    //  ------------------ GET------------------
-    List<Activity> getAllActivities();
-    List<Activity> getActivitiesByType(String type);
-    List<Activity> getActivitiesByUsername(String username);
+
+    // ----------------- ALL GETS -----------------
     Activity getActivityById(Long id);
 
-    //  ------------------ SAVE ------------------
-    Activity saveActivity(Activity activity);
+    // ----------------- ALL CREATE -----------------
+    void createActivity(Activity activity);
 
-    //  ------------------ DELETE ------------------
-    void deleteActivity(Long id);
+    // ----------------- ALL CREATE -----------------
 
-    //  ------------------ PUT ------------------
-    Activity updateActivity(long id, Activity activity);
+
+
 }
