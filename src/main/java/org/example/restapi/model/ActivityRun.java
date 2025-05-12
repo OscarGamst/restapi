@@ -8,13 +8,13 @@ import jakarta.persistence.*;
 public class ActivityRun extends Activity {
 
     @Column(name = "distance")
-    private int distance;
+    private Integer distance;
 
-    public int getDistance() {
+    public Integer getDistance() {
         return distance;
     }
 
-    public void setDistance(int distance) {
+    public void setDistance(Integer distance) {
         this.distance = distance;
     }
 }
