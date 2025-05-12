@@ -22,13 +22,13 @@ public class User {
     private String password;
 
     @Column(name = "profile_vis")
-    private boolean profile_vis;
+    private Boolean profile_vis;
 
     @Column(name = "birthdate")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date birthdate;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Activity> activities = new HashSet<>();
 
     public void addActivity(Activity activity) {
@@ -60,11 +60,11 @@ public class User {
         this.password = password;
     }
 
-    public boolean isProfile_vis() {
+    public Boolean isProfile_vis() {
         return profile_vis;
     }
 
-    public void setProfile_vis(boolean profile_vis) {
+    public void setProfile_vis(Boolean profile_vis) {
         this.profile_vis = profile_vis;
     }
 

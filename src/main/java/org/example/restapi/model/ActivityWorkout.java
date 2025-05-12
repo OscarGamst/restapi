@@ -11,15 +11,15 @@ import jakarta.persistence.Table;
 public class ActivityWorkout extends Activity {
 
     @Column(name = "sets")
-    private int sets;
+    private Integer sets;
 
     @Column(name = "reps")
-    private int reps;
+    private Integer reps;
 
     @Column(name = "weight")
-    private int weight;
+    private Integer weight;
 
-    public int getSets() {
+    public Integer getSets() {
         return sets;
     }
 
@@ -27,7 +27,7 @@ public class ActivityWorkout extends Activity {
         this.sets = sets;
     }
 
-    public int getReps() {
+    public Integer getReps() {
         return reps;
     }
 
@@ -35,7 +35,7 @@ public class ActivityWorkout extends Activity {
         this.reps = reps;
     }
 
-    public int getWeight() {
+    public Integer getWeight() {
         return weight;
     }
 
