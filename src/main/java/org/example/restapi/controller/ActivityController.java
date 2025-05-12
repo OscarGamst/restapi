@@ -1,11 +1,11 @@
 package org.example.restapi.controller;
 
-import jakarta.validation.Valid;
-import org.example.restapi.dto.UserBasicDTO;
-import org.example.restapi.dto.UserDetailedDTO;
-import org.example.restapi.mapper.UserMapper;
-import org.example.restapi.model.User;
-import org.example.restapi.service.UserService;
+import org.example.restapi.dto.ActivityResponseDTO;
+import org.example.restapi.dto.CreateActivityRequest;
+import org.example.restapi.model.*;
+import org.example.restapi.repository.UserRepository;
+import org.example.restapi.service.ActivityService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,66 +14,107 @@ import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/users")
-public class UserController {
-    private final UserService userService;
-    private final UserMapper userMapper;
+@RequestMapping("/api/activity")
+public class ActivityController {
 
-    public UserController(UserService userService, UserMapper userMapper) {
-        this.userService = userService;
-        this.userMapper =userMapper;
+    @Autowired
+    private final ActivityService activityService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+
+    public ActivityController(ActivityService activityService) {
+        this.activityService = activityService;
     }
+
     // ----------------- ALL GETS -----------------
-    //Basic user info
-    @GetMapping("/basic")
-    public ResponseEntity<List<UserBasicDTO>> getAllUsers() {
-        List<User> users = userService.getUsers();
-        List<UserBasicDTO> dtos = userMapper.usersToUserBasicDTOs(users);
-        return ResponseEntity.ok(dtos);
-    }
-    @GetMapping("/basic/{username}")
-    public ResponseEntity<UserBasicDTO> getUserBasic(@PathVariable String username) {
-        User user = userService.getUser(username);
-        UserBasicDTO dto = userMapper.userToUserBasicDTO(user);
-        return ResponseEntity.ok(dto);
+    @GetMapping("/{id}")
+    public ResponseEntity<ActivityResponseDTO> getActivityById(@PathVariable Long id) {
+        // Fetch the activity by ID
+        Activity activity = activityService.getActivityById(id);
+
+        if (activity == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        // Convert Activity to ActivityResponseDTO
+        ActivityResponseDTO response = new ActivityResponseDTO(
+                activity.getId(),
+                activity.getType(),
+                activity.getTitle(),
+                activity.getDescription(),
+                activity.getDuration(),
+                activity.getCalories(),
+                activity.getTimestamp(),
+                activity.getUser().getUsername()// Only include the username
+        );
+        // Add specific fields based on the activity type
+        if (activity instanceof ActivityRun) {
+            ActivityRun run = (ActivityRun) activity;
+            response.setDistance(run.getDistance());  // Set the distance for ActivityRun
+        } else if (activity instanceof ActivityWorkout) {
+            ActivityWorkout workout = (ActivityWorkout) activity;
+            response.setSets(workout.getSets());
+            response.setReps(workout.getReps());
+            response.setWeight(workout.getWeight());
+        }
+
+
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    //Detailed user info
-    @GetMapping("/detailed")
-    public ResponseEntity<List<UserDetailedDTO>> getUserDetailed() {
-        List<User> users = userService.getUsers();
-        List<UserDetailedDTO> dtos = userMapper.usersToUserDetailedDTOs(users);
-        return ResponseEntity.ok(dtos);
-    }
-    @GetMapping("/detailed/{username}")
-    public ResponseEntity<UserDetailedDTO> getUserDetailed(@PathVariable String username) {
-        User user = userService.getUser(username);
-        UserDetailedDTO dto = userMapper.userToUserDetailedDTO(user);
-        return ResponseEntity.ok(dto);
-    }
+
     // ----------------- ALL POSTS -----------------
+
     @PostMapping
-    public void createUser(@RequestBody User user) {
-        userService.createUser(user);
+    public ResponseEntity<ActivityResponseDTO> createActivity(@RequestBody CreateActivityRequest request) {
+        User user = userRepository.findById(request.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Activity activity;
+        switch (request.getType()) {
+            case "run":
+                ActivityRun run = new ActivityRun();
+                run.setDistance(request.getDistance() != null ? request.getDistance() : 0);
+                activity = run;
+                break;
+            case "workout":
+                ActivityWorkout workout = new ActivityWorkout();
+                workout.setSets(request.getSets() != null ? request.getSets() : 0);
+                workout.setReps(request.getReps() != null ? request.getReps() : 0);
+                workout.setWeight(request.getWeight() != null ? request.getWeight() : 0);
+                activity = workout;
+                break;
+            default:
+                activity = new ActivityCustom();
+        }
+
+        //activity.setType(request.getType());
+        activity.setTitle(request.getTitle());
+        activity.setDescription(request.getDescription());
+        activity.setDuration(request.getDuration());
+        activity.setCalories(request.getCalories());
+        activity.setUser(user);
+
+        activityService.createActivity(activity);
+
+        ActivityResponseDTO response = new ActivityResponseDTO(
+                activity.getId(),
+                activity.getType(),
+                activity.getTitle(),
+                activity.getDescription(),
+                activity.getDuration(),
+                activity.getCalories(),
+                activity.getTimestamp(),
+                user.getUsername()
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     // ----------------- ALL DELETES -----------------
-    @DeleteMapping("/delete/{username}")
-    public ResponseEntity<Void> deleteUser(@PathVariable String username) {
-        userService.deleteUserByUsername(username);
-        return ResponseEntity.noContent().build();
-    }
 
     // ----------------- ALL UPDATES -----------------
-    @PutMapping("/{username}")
-    public ResponseEntity<User> updateUser(@PathVariable String username, @RequestBody User updatedUser) {
-        try {
-            User user = userService.updateUser(username, updatedUser);
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
 }
-
 
