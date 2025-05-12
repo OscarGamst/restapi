@@ -87,14 +87,14 @@ src/main/java/com/example/restapi/
 ## Key Features
 ### Users
 - Create and update users
-- Deleting users (will be added)
+- Deleting users 
 - See users Activities 
 
 ### Activities
 - Create activities
 - update activities (will be added)
-- Deleting activities (will be added)
-- Viewing activities (and filter different types) 
+- Deleting activities (will be added as a standalone, only works when deleting user)
+- Viewing activities (and filter different types, only basic now) 
 
 ## Users
 ### Endpoints
@@ -115,8 +115,9 @@ Request Body:
 ```
 
 **Get Users**
+You can swap between /basic and /detailed, they have same functionality but show sligtly different data
 ```sh
-GET /users
+GET /users/basic OR /detailed
 ```
 
 Response:
@@ -125,20 +126,28 @@ Response:
     {
         "username": "A username",
         "email": "email@example.com",
-        "password": "password",
-        "birthdate": "2000-01-01",
-        "profile_vis": false,
-        "activities": []
+        "profile_vis": true
     },
     {
         "username": "Another username",
-        "email": "another-email@example.com",
-        "password": "Another password",
-        "birthdate": "2000-02-02",
-        "profile_vis": false,
-        "activities": []
+        "email": "email@example.com",
+        "profile_vis": false
     }
 ]
+```
+
+```sh
+GET /users/detailed/{username}  OR /basic
+```
+Response:
+```sh
+{
+    "username": "A username",
+    "password": "password",
+    "email": "email@example.com",
+    "birthday": null,
+    "profile_vis": true
+}
 ```
 
 ## Activities
@@ -156,107 +165,60 @@ Request Body:
   "title": "A title",
   "description": "A description",
   "duration": "100",
-  "calories": "1"
+  "calories": "1",
+  "distance": "5"
+}
+//Another example
+{
+  "username": "Another username",
+  "type": "workout",
+  "title": "A title",
+  "description": "A description",
+  "duration": "99",
+  "calories": "10",
+  "sets": "1",
+  "reps": "3",
+  "weight": "5"
 }
 ```
-Response:
-```sh
-    {
-        "id": 2,
-        "username": "A username",
-        "type": "run",
-        "title": "A title",
-        "description": "A description",
-        "duration": 100,
-        "calories": 1,
-        "timestamp": "2025-03-17 18:48:20"
-    }
-```
 
-**Get all Activities**
+**Get Activity**
 ```sh 
-GET /activities
+GET /activity/{id}
 ```
-
+For now it still shows the other fields, but will try to make it more smooth,
+and I will add so you can get all activites etc.
 Response:
 ```sh
-[
-    {
-        "id": 2,
-        "username": "A username",
-        "type": "run",
-        "title": "A title",
-        "description": "A description",
-        "duration": 100,
-        "calories": 1,
-        "timestamp": "2025-03-17 18:48:20"
-    },
-    {
-        "id": 3,
-        "username": "Another username",
-        "type": "workout",
-        "title": "Another title",
-        "description": "Another description",
-        "duration": 110,
-        "calories": 2,
-        "timestamp": "2025-03-17 18:50:04"
-    }
-]
-```
-
-**Get a specific Activity**
-```sh 
-GET /activities/id
-```
-Response:
-```sh
-    {
-        "id": 2,
-        "username": "A username",
-        "type": "run",
-        "title": "A title",
-        "description": "A description",
-        "duration": 100,
-        "calories": 1,
-        "timestamp": "2025-03-17 18:48:20"
-    }
-```
-
-**Delete Activity**
-```sh
-DELETE /activities/id
-```
-
-Response:
-```sh
-200 OK
-```
-
-**Update Activity**
-```sh
-PUT /activities/id
-```
-
-Request body:
-```sh
-    {
-        "type": "workout",
-        "title": "Updated title",
-        "description": "Updated description",
-        "duration": 110
-    }
-```
-
-Response:
-```sh
-    {
-        "id": 3,
-        "username": "Another username",
-        "type": "workout",
-        "title": "Updated title",
-        "description": "Updated description",
-        "duration": 110,
-        "calories": 2,
-        "timestamp": "2025-03-17 18:50:04"
-    }
+{
+    "id": 3,
+    "type": "activityrun",
+    "title": "A title",
+    "description": "A description",
+    "duration": 100,
+    "calories": 1,
+    "timestamp": "2025-05-12T19:31:12.695184",
+    "username": "A username",
+    "distance": 5,
+    "sets": null,
+    "reps": null,
+    "weight": null,
+    "test": null
+}
+//Another example
+{
+    "id": 4,
+    "type": "activityworkout",
+    "title": "A title",
+    "description": "A description",
+    "duration": 99,
+    "calories": 10,
+    "timestamp": "2025-05-12T19:32:47.937357",
+    "username": "Another username",
+    "distance": null,
+    "sets": 1,
+    "reps": 3,
+    "weight": 5,
+    "test": null
+}
 ```
