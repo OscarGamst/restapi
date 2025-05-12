@@ -149,6 +149,11 @@ Response:
     "profile_vis": true
 }
 ```
+**Delete User**
+```sh
+DEL /users/delete{username}
+```
+This will delete the user and all their related activities
 
 ## Activities
 ### Endpoints
