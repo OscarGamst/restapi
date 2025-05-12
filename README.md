@@ -9,10 +9,10 @@ A **Spring Boot** backend for a workout tracking application. This backend handl
 - User authentication and authorization *(future implementation)*
 - REST API for activity management
 - PostgreSQL database integration
-- DTO-based request/response handling
+- DTO-based request/response handling (Will be expanded with mappers)
 - Service-layer business logic
 - Structured project architecture
-- API documentation with Postman
+- API documentation with Postman (Swagger will be implemented in the future)
 
 ## Technologies Used
 | Technology   | Version |
@@ -87,12 +87,13 @@ src/main/java/com/example/restapi/
 ## Key Features
 ### Users
 - Create and update users
-- Deleting users
-- See users Activities
+- Deleting users (will be added)
+- See users Activities 
 
 ### Activities
-- Create and update activities
-- Deleting activities
+- Create activities
+- update activities (will be added)
+- Deleting activities (will be added)
 - Viewing activities (and filter different types) 
 
 ## Users

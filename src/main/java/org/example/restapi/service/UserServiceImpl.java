@@ -13,11 +13,21 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+    // ----------------- ALL GETS -----------------
+    @Override
+    public List<User> getUsers() {
+        return userRepository.findAll();
+    }
+    @Override
+    public User getUser(String username) {
+        return userRepository.findUserByUsername(username);
+    }
     // ----------------- ALL CREATE -----------------
     @Override
     public void createUser(User user) {
         userRepository.save(user);
     }
+
 
     // ----------------- ALL UPDATES -----------------
     public User updateUser(String username, User updatedUser) {
@@ -26,5 +36,12 @@ public class UserServiceImpl implements UserService {
             user.setPassword(updatedUser.getPassword());
             return userRepository.save(user);
         }).orElseThrow(() -> new RuntimeException("User not found with username: " + username));
+    }
+
+    @Override
+    public void deleteUserByUsername(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        userRepository.delete(user);
     }
 }
